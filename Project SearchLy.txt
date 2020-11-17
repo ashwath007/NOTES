@@ -1,0 +1,63 @@
+const express = require("express");
+
+const app = express();
+
+const bodyParser = require('body-parser');
+const json = express.json();
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const googleDictionaryApi = require("google-dictionary-api")
+
+  
+
+app.post("/word",(req,res)=>{
+	console.log(req.body);
+	googleDictionaryApi.search(req.body.word, 'en')
+    .then(results=>{
+      console.log(results[0].meaning.noun[0].definition);
+	  // var obj = JSON.parse(results);
+	        console.log("||||||"+results[0].meaning.noun[0].example);
+	  	        // console.log("||||||"+results[0].partOfSpeech);
+	res.send("vicky");
+    })
+    .catch(error=>{
+      res.send(error);
+    })
+})
+app.listen(4000,()=>{
+	console.log("Server started");
+});//CqwX
+
+
+
+
+
+*********************************************************************
+"dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "extract-json": "^0.2.0",
+    "file-extension": "^4.0.5",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "google-dictionary-api": "^1.0.8",
+    "heroku": "^7.40.0",
+    "json-to-txt": "^2.0.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "validator": "^10.9.0"
+  }

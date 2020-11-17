@@ -1,0 +1,120 @@
+offer option crime clap maximum prefer wreck galaxy raccoon way rose castle
+
+
+
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mangoose = require('mongoose');
+var jsonParser = bodyParser.json();
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//DATAmongoose.connect(uri,);
+mangoose.connect("mongodb://localhost/App", {useNewUrlParser: true, useUnifiedTopology: true});
+
+
+
+var SkcetHallSchema = new mangoose.Schema({
+	hallname:String,
+	capacity:String,
+	img:String
+});
+//SCHEMA
+var SkcetHall = mangoose.model("SkcetHall",SkcetHallSchema);
+//MODEL
+SkcetHall.create(
+	{
+		hallname:"G - Bar",
+		capacity:"capacity - 820p",
+		img:"https://i.ibb.co/qCtb9RS/maria-nazipova-owu-Uwhh-Wbow-unsplash.png"
+	},
+		{
+		hallname:"Cnn",
+		capacity:"capacity - 500p",
+		img:"https://i.ibb.co/jH2v5Jg/hiderm-owen-P5-BTbw1-Xkk-U-unsplash.png"
+	},
+		{
+		hallname:"Weedy",
+		capacity:"capacity - 130p",
+		img:"https://i.ibb.co/WxHKPjb/product-school-Lo2-Sau-LBP7g-unsplash.png"
+	},function(err,halls){
+		if(err){
+		   console.log(err);
+		   }
+		else{
+			console.log(halls);
+		}
+	}
+	
+);
+
+app.get("/",function(req,res){
+	console.log("Hit");
+	SkcetHall.find({},function(err,allHall){
+		if(err){
+		   console.log("Error");
+		   }
+		else{
+			console.log("Sucess ADDED"+allHall);
+			res.render("landing.ejs",{data:allHall});
+		}
+	});
+	 //here
+});
+app.get("/new",function(req,res){
+	res.render("new.ejs");
+});
+app.post("/newhall",function(req,res){
+	console.log(req.body.em);
+	console.log(req.body.passwd); //here save the email and passwd and move to add hgalll page
+	console.log("done");
+	res.render("addhall.ejs");
+});
+app.post("/save",function(req,res){
+	console.log(req.body.gp);
+});
+app.post("/addHHall",function(req,res){
+	console.log(req.body.hallname);
+	data.push(req.body);
+	res.render("landing.ejs",{data:data});
+	console.log(data);
+});
+app.get("/book/:id",function(req,res){
+	SkcetHall.findById(req.params.id,function(err,all){
+		if(err){
+		   console.log("Error Here");
+		   }
+		else{
+			console.log(res.params);
+			console.log(all);
+			res.render("booking.ejs",{bookdata:all});
+			console.log(all);
+		}
+	});
+	console.log(req.params);
+});
+app.listen(3000,function(){
+	console.log("Connected Sucessfully");
+});
+
+ 							the link for header and footer			<%- include("partials/header") %>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.post("/blog/deletepost/:id",function(req,res){
+	console.log(req.params.id);
+	BlogData.findById(req.params.id,function(err,status){
+		if(err){
+		   console.log("It's an error!!!!!!");
+		   }
+		else{
+			
+		}
+	});
+});
+
+
+
+Concepts ..... April 20 2020;
+
+		* How to embeddd the script(HTML) tag inside the paragraph
+			Ans : <%-   Tag to be added  %> 
