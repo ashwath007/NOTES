@@ -1,0 +1,124 @@
+  Intent v = new Intent(MainActivity.this,ECard.class);
+                startActivity(v);
+
+
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mandoose = require('mongoose');
+var jsonParser = bodyParser.json();
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//DATA
+mongoose.connect("mongodb://localhost/skcethall");
+
+var SkcetHall = new mongoose.Schema({
+	hallname:String,
+	capacity:String,
+	img:String
+});
+//SCHEMA
+SkcetHall.create(
+	{
+		hallname:"Convention Center",
+		capacity:"capacity - 320p",
+		img:"https://i.ibb.co/qCtb9RS/maria-nazipova-owu-Uwhh-Wbow-unsplash.png"
+	},
+		{
+		hallname:"Krishna Hall",
+		capacity:"capacity - 500p",
+		img:"https://i.ibb.co/jH2v5Jg/hiderm-owen-P5-BTbw1-Xkk-U-unsplash.png"
+	},
+		{
+		hallname:"BS - 03",
+		capacity:"capacity - 130p",
+		img:"https://i.ibb.co/WxHKPjb/product-school-Lo2-Sau-LBP7g-unsplash.png"
+	},function(err,halls){
+		if(err){
+		   console.log(err);
+		   }
+		else{
+			console.log(halls);
+		}
+	}
+	
+);
+
+var data = [
+	{
+		hallname:"Convention Center",
+		capacity:"capacity - 320p",
+		img:"https://i.ibb.co/qCtb9RS/maria-nazipova-owu-Uwhh-Wbow-unsplash.png"
+	},
+		{
+		hallname:"Krishna Hall",
+		capacity:"capacity - 500p",
+		img:"https://i.ibb.co/jH2v5Jg/hiderm-owen-P5-BTbw1-Xkk-U-unsplash.png"
+	},
+		{
+		hallname:"BS - 03",
+		capacity:"capacity - 130p",
+		img:"https://i.ibb.co/WxHKPjb/product-school-Lo2-Sau-LBP7g-unsplash.png"
+	}
+];
+app.get("/",function(req,res){
+	res.render("landing.ejs",{data:data});
+});
+app.get("/new",function(req,res){
+	res.render("new.ejs");
+});
+app.post("/newhall",function(req,res){
+	console.log(req.body.em);
+	console.log(req.body.passwd); //here save the email and passwd and move to add hgalll page
+	console.log("done");
+	res.render("addhall.ejs");
+});
+app.post("/save",function(req,res){
+	console.log(req.body.gp);
+});
+app.post("/addHHall",function(req,res){
+	console.log(req.body.hallname);
+	data.push(req.body);
+	res.render("landing.ejs",{data:data});
+	console.log(data);
+});
+app.listen(3000,function(){
+	console.log("Connected Sucessfully");
+});\
+
+
+
+
+
+
+
+
+
+package.json
+
+
+ "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "file-extension": "^4.0.5",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "heroku": "^7.40.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "validator": "^10.9.0"
+  }

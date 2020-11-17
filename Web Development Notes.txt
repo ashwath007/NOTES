@@ -1,0 +1,573 @@
+offer option crime clap maximum prefer wreck galaxy raccoon way rose castle
+
+
+
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mangoose = require('mongoose');
+var jsonParser = bodyParser.json();
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//DATAmongoose.connect(uri,);
+mangoose.connect("mongodb://localhost/App", {useNewUrlParser: true, useUnifiedTopology: true});
+
+
+
+var SkcetHallSchema = new mangoose.Schema({
+	hallname:String,
+	capacity:String,
+	img:String
+});
+//SCHEMA
+var SkcetHall = mangoose.model("SkcetHall",SkcetHallSchema);
+//MODEL
+SkcetHall.create(
+	{
+		hallname:"G - Bar",
+		capacity:"capacity - 820p",
+		img:"https://i.ibb.co/qCtb9RS/maria-nazipova-owu-Uwhh-Wbow-unsplash.png"
+	},
+		{
+		hallname:"Cnn",
+		capacity:"capacity - 500p",
+		img:"https://i.ibb.co/jH2v5Jg/hiderm-owen-P5-BTbw1-Xkk-U-unsplash.png"
+	},
+		{
+		hallname:"Weedy",
+		capacity:"capacity - 130p",
+		img:"https://i.ibb.co/WxHKPjb/product-school-Lo2-Sau-LBP7g-unsplash.png"
+	},function(err,halls){
+		if(err){
+		   console.log(err);
+		   }
+		else{
+			console.log(halls);
+		}
+	}
+	
+);
+
+app.get("/",function(req,res){
+	console.log("Hit");
+	SkcetHall.find({},function(err,allHall){
+		if(err){
+		   console.log("Error");
+		   }
+		else{
+			console.log("Sucess ADDED"+allHall);
+			res.render("landing.ejs",{data:allHall});
+		}
+	});
+	 //here
+});
+app.get("/new",function(req,res){
+	res.render("new.ejs");
+});
+app.post("/newhall",function(req,res){
+	console.log(req.body.em);
+	console.log(req.body.passwd); //here save the email and passwd and move to add hgalll page
+	console.log("done");
+	res.render("addhall.ejs");
+});
+app.post("/save",function(req,res){
+	console.log(req.body.gp);
+});
+app.post("/addHHall",function(req,res){
+	console.log(req.body.hallname);
+	data.push(req.body);
+	res.render("landing.ejs",{data:data});
+	console.log(data);
+});
+app.get("/book/:id",function(req,res){
+	SkcetHall.findById(req.params.id,function(err,all){
+		if(err){
+		   console.log("Error Here");
+		   }
+		else{
+			console.log(res.params);
+			console.log(all);
+			res.render("booking.ejs",{bookdata:all});
+			console.log(all);
+		}
+	});
+	console.log(req.params);
+});
+app.listen(3000,function(){
+	console.log("Connected Sucessfully");
+});
+
+ 							the link for header and footer			<%- include("partials/header") %>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.post("/blog/deletepost/:id",function(req,res){
+	console.log(req.params.id);
+	BlogData.findById(req.params.id,function(err,status){
+		if(err){
+		   console.log("It's an error!!!!!!");
+		   }
+		else{
+			
+		}
+	});
+});
+
+
+
+Concepts ..... April 20 2020; 
+
+		* How to embeddd the script(HTML) tag inside the paragraph
+			Ans : <%-   Tag to be added  %>  and also see the tutorial to learn that.
+		* Method Override
+			Ans : ?_method=PUT  method=POST   so we have to install method-override 
+				1. BlogData.findByIdAndUpdate and findByIdAndCreate
+------->   April 21 2020;
+		
+		
+		* Data Association
+			1. One - One
+			2. One - many
+			3. Many - Many
+		* Object References
+			Data is referenced with _idb  
+			So for dot.fix we can actually use the concept of object referance 
+			Learned abt populating the data
+		**************************** Revise Data Associations*******************************
+	
+		* Yelp Comments
+		^^^ note: 
+			to use findOrCreate method in mongoose we have got a plugin link: npmjs.com/package/mongoose-findorcreate
+
+
+
+	WHILE WORKING WITH MSI MACHINE 
+				TO CLOSE THE node WHEN ERROR : Error: listen EADDRINUSE: address already in use :::3000
+				SOLUTION : 
+
+
+					I hit this on my laptop running win8. this worked.
+					Run cmd.exe as 'Administrator':
+					C:\Windows\System32>taskkill /F /IM node.exe
+					SUCCESS: The process "node.exe" with PID 11008 has been terminated.
+
+---------> April 23 2020;
+			
+			1.  SALT(cryptography) : link : https://en.wikipedia.org/wiki/Salt_(cryptography)
+			2. Study VIRTUAL concept link :https://mongoosejs.com/docs/tutorials/virtuals.html
+			3. A universally unique identifier (UUID) is a 128-bit number used to identify information in computer systems. The term globally unique identifier (GUID) is also used, typically in software created by Microsoft.
+			4. UUID ..... RFC4122
+			5. schema.method
+			
+			6. "C:\Program Files\MongoDB\Server\4.2\bin\mongo.exe"                connect mongo
+			7. http://expressjs.com/en/guide/writing-middleware.html#writing-middleware-for-use-in-express-apps --- middleware
+			8. mongod start in groomIDE : STEP 1 >>> echo "mongod --nojournal"  > mongod
+						STEP 2 >>>chmod a+x mongod
+
+
+
+
+
+{
+  "name": "testdotsend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	  "start":"node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "file-extension": "^4.0.5",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "heroku": "^7.40.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "validator": "^10.9.0"
+  }
+}
+
+
+
+
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	  "start":"node app.js"
+  },
+
+mongodb://localhost:27017/dorsendApp
+
+
+	<form action="/" enctype="multipart/form-data" method="post">
+            
+    <input type="file" name="upload" id="file-5" class="inputfile inputfile-4" data-multiple-caption="{count} files selected"  multiple required>
+
+
+
+
+
+SENDGRID
+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
+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
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel = "icon" type = "image/png" href = "https://i.ibb.co/WGK3xzk/icon-72x72.png">
+	  <link rel = "apple-touch-icon" type = "image/png" href = "https://i.ibb.co/WGK3xzk/icon-72x72.png"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel = "icon" type = "image/png" href = "https://i.ibb.co/WGK3xzk/icon-72x72.png">
+	  <link rel = "apple-touch-icon" type = "image/png" href = "https://i.ibb.co/WGK3xzk/icon-72x72.png"/>
+    <title>File Uploads</title>
+	  </head>
+  <body>
+   <div class="container" style="margin-top: 5cm;">
+<!-- <div class="d-flex justify-content-center">
+ <div class="spinner-border" style="width: 6rem; height: 6rem;" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+</div> -->
+    </div>
+	<%= msg%>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
+<!DOCTYPE html>
+
+
+
+
+const express = require('express');
+const app = express();
+var formidable = require('formidable');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var cors = require('cors');
+const fs = require('fs');
+const Path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
+var fileExtension = require('file-extension');
+var dir = require('node-dir');
+const chalk = require('chalk');
+var randomize = require('randomatic');
+var cookieParser = require('cookie-parser');
+//FILE TYPE
+const FileType = require('file-type');
+var detect = require('detect-file-type'); //FILE TYPE
+require('dotenv').config();
+
+var mammoth = require("mammoth");
+const shortid = require('shortid');
+var session = require('express-session')
+var randtoken = require('rand-token');
+
+
+const path = require('path');
+app.use(express.static('./public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine','ejs');
+app.use(cookieParser());
+
+
+//ALL ROUTES
+const createRoutes      = require('./routes/create');
+const createAccount     = require('./routes/createAccount');
+const emailCode         = require('./routes/emailverify');
+const login             = require('./routes/login');
+const signout           = require('./routes/signout');
+const loginCode         = require('./routes/loginCode');
+
+//HOME PAGE ROUTES
+const home              = require('./routes/home');
+const upload            = require('./routes/rupload');
+// 2.Resume
+const dashboardCreateResume = require('./routes/createresume');
+const dashboardCreateResumeFillOne = require('./routes/dashboardResumefillOne');//Hunch_Resume/
+const deshboardCreateResumeFillTwo = require('./routes/dashboardResumefillTwo');
+const dashboardCreateResumeFillThree = require('./routes/dashboardResumefillThree');
+//2.1Resume PG
+const dashboardCreateResumeFillThreePG = require('./routes/dashboardResumefillThreePG');
+//1.Dashboard
+const dashboardDashboard	= require('./routes/dashboardDashboard');
+//See resume
+const seeMyResume           = require('./routes/seeMyResume');//Hunch_Resume/routes/seeMyResume.js
+//User uploads the resume router
+//const uploadMyResume        = require('./routes/resumeUpload');  //Hunch_Resume/routes/resumeUpload
+//Profile Page 
+const dashboardDashboardProfile = require('./routes/profile');//Hunch_Resume/routes/profile.js
+//Resume Review
+const resumereview           = require('./routes/reviewresume');//Hunch_Resume/routes/reviewresume
+//My Job 
+const myJob = require('./routes/myjob');
+
+//User database
+const User = require('./models/palUser');
+
+//DATABASE
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then(() => {
+    console.log(chalk.green.bold("DONE"));
+});
+//
+
+
+
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+	  secure: true,
+	  httpOnly:true,  
+  }
+}))
+
+app.get("/",(req,res)=>{
+	
+	//CHECKING IF HE/SHE IS NEW OR NOT
+	
+	const USER_ID = uuidv4();
+	const G_ID = shortid.generate();
+	res.cookie("USER_ID",USER_ID);
+	res.cookie("G_ID",G_ID);
+	res.cookie("EVer",0);
+	res.cookie("PVer",0);
+	res.cookie("P_complete",0);
+	res.cookie("Ecode","");
+	if((req.cookies.TOKEN == null) && (req.cookies.TOKEN_ID == null)){
+	
+	res.cookie("TOKEN","");
+	res.cookie("TOKEN_ID","");
+		
+	}	
+		console.log(chalk.bold.yellow(req.cookies.USER_ID+"__"+req.cookies.G_ID+"__"+req.cookies.EVer+"__"+req.cookies.PVer+"__"+req.cookies.P_complete+"__"+req.cookies.Ecode+"__"+req.cookies.TOKEN+"__"+req.cookies.TOKEN_ID));
+		res.render("land");
+	
+	
+});
+
+
+
+//ACCOUNT CREATION AND LOGIN BLOCK****
+app.use("/hunch",createRoutes);
+app.use("/hunch/pal",createAccount);
+app.use("/hunch/pal",emailCode);
+app.use("/hunch/pal",login);
+app.use("/hunch/pal",signout);
+app.use("/hunch/pal",loginCode);
+//************************************
+
+//USER HOME***************************
+app.use("/hunch/pal",home);
+				//RESUME
+				//-->>>UPLOAD
+				app.use("/hunch/pal",upload);
+
+														// HOME
+														// 1.DASHBOARD
+														// 2.RESUME
+														// 3.PROFILE
+														// 4.SETTINGS
+														// 5.SIGN OUT
+//1.Dashboard
+app.use("/hunch/pal",dashboardDashboard);
+//2.Resume
+app.use("/hunch/pal",dashboardCreateResume);///<%=token%>/creatersume
+
+//Resume Filling 
+app.use("/hunch/pal/resume",dashboardCreateResumeFillOne);
+app.use("/hunch/pal/resume",deshboardCreateResumeFillTwo);
+app.use("/hunch/pal/resume",dashboardCreateResumeFillThree);
+//PG
+app.use("/hunch/pal/resume",dashboardCreateResumeFillThreePG);
+//************************************
+app.use("/hunch/pal",seeMyResume);
+
+//Resume resumeUpload
+// app.use("/hunch/pal",uploadMyResume);
+//Profile Page
+app.use("/hunch/pal",dashboardDashboardProfile);
+//User Reviews his/her resume
+app.use("/hunch/pal",resumereview);
+//My job routes
+app.use("/hunch/pal",myJob);
+
+//
+app.get("/login",(req,res)=>{
+	res.render("loginpage");
+});
+
+
+
+app.get("/upload",(req,res)=>{
+	res.render("home",{user_name:"User name"});
+});
+
+//pricing
+app.get("/hunch/pal/pricing",(req,res)=>{
+	res.render("pricing.ejs");
+});
+
+
+
+//Here we are uploading the file 
+
+app.post("/hunch/pal/resume/:token/uploadresume/file",(req,res)=>{///hunch/pal/resume/7957be68-7c92-413b-bb6c-fc81876c9dcdCYYGX3NxU/uploadresume/file
+
+	console.log(chalk.red(req.params.token));
+	console.log(req.cookies.TOKEN);
+	console.log(req.params.token);
+
+	
+	//Here we are getting the user data and merge his/her name with filename
+	User.findOne({TOKEN:req.cookies.TOKEN},(errors,gotUser)=>{
+		if(errors){
+			res.send("Error can't find the user");
+		}
+		else{
+			console.log(chalk.bold.yellow(gotUser));
+			const EmailHo = gotUser.email.slice(0,4);
+			const FileEName = gotUser.name+EmailHo.replace(/ /g, "");
+			console.log(chalk.red("----> "+gotUser.name+gotUser.email.slice(0,4)));
+				const USER_ID = randomize('Aa', 8);
+				var form = new formidable.IncomingForm();
+			
+			form.parse(req, (error, fields, files)=>{
+		console.log(files);
+		if(files.size>1048560){
+		   res.render("admin",{msg:"Kindly Upload File less than 10MB ",branch:""});
+		   }
+		else{
+			
+				
+		}
+	});
+
+    fs.mkdir('public/uploads/userresume/' + USER_ID, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Directory Created');
+        }
+    });
+	
+	
+	
+    form.on('fileBegin', function(name, file) {
+	try{
+		console.log(chalk.green.bold(file.type));
+        var newfinleName = file.name.replace(/ /g, "");
+        file.path = __dirname + '/public/uploads/userresume/'  + USER_ID + "/" + newfinleName;//Hunch_Resume/public/uploads/userresume
+        console.log(__dirname);
+        console.log(file.path);
+
+        console.log(USER_ID);
+	}
+		catch(exce){
+			res.send("Error Please try again");
+		
+		}
+
+    });
+
+//dd
+   
+      form.on('end', () => {
+		  setTimeout(()=>{
+			 dir.files('public/uploads/userresume/' + USER_ID, 'file', function(err, content) {
+                if (err) throw err;
+                content.forEach((files) => {
+                    console.log('files : ', files); // get content of filesconm
+					console.log(chalk.yellow(files));
+					console.log(chalk.yellow(files.slice(7)));
+						console.log(chalk.yellow(files.slice(12)));
+					
+					//FILE TYPE 
+								console.log(chalk.red(path.extname(files.slice(12))));
+								const File_Type_detect = path.extname(files.slice(12));
+					//			
+								const GG = files.slice(7);
+					console.log(chalk.bold.red(GG));
+								//let's put the path in palUser badabase
+								gotUser.RESUME_UPLOAD_FILE.push(GG);
+								const sGG = GG.slice(28);
+								gotUser.RESUME_FILE_NAME.push(sGG);
+								gotUser.save((eroo,saved)=>{
+									if(eroo){
+									   console.log(eroo);
+									   }
+									else{
+										console.log(saved);
+										res.send("Done uploading");
+									}
+								});
+								
+							
+			
+				})
+
+            },
+            function(err, files) {
+                if (err) throw err;
+                console.log('finished reading files:'); // get filepath 
+			
+			
+            });
+			 
+		 },4300)
+        
+    });
+		}
+	});
+	
+    
+
+});
+
+
+
+
+
+
+
+app.listen(5000,()=>{
+	console.log(chalk.bold.red("Server is started.."));
+});

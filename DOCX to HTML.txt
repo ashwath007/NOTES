@@ -1,0 +1,103 @@
+var express = require('express');
+var formidable = require('formidable');
+const mongoose = require('mongoose');
+var cors = require('cors');
+var jwt = require('jsonwebtoken');
+require('dotenv').config();
+var randomize = require('randomatic');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var app = express();
+var cookieParser = require('cookie-parser');
+var i = 0;
+const fs = require('fs');
+const Path = require('path');
+var fileExtension = require('file-extension');
+var mammoth = require("mammoth");
+ const FileType = require('file-type');
+var dir = require('node-dir');
+const chalk = require('chalk');
+	var unoconv = require('unoconv');
+//PDF2HTML
+const pdf2html = require('pdf2html')
+//
+const pdftohtml = require('pdftohtmljs')
+app.use(express.static('./public'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+const PORT = 5000;
+
+app.set("view engine",'ejs');
+
+
+
+// Here we are doing convertion Docx to HTML and pdf to HTML tool
+
+// library we use https://www.npmjs.com/package/mammoth
+
+
+
+
+
+
+
+app.get("/get/:doc",(req,res)=>{
+	console.log(req.params.doc);
+	let resume;
+	var html;
+	const mam  = (resu) => {
+	   res.send(resu)
+	}
+	
+mammoth.convertToHtml({path: req.params.doc})
+    .then(function(result){
+       html = result.value; // The generated HTML
+        var messages = result.messages; // Any messages, such as warnings during conversion
+		 mam(html)
+	// res.send(html)
+    }).then();
+	
+});
+
+app.get("/",(req,res)=>{
+	res.render("home",{ho:"sanju.docx"});
+});
+app.listen(PORT,()=>{
+	console.log("Server ready !!1");
+});
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+"dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cloudmersive-convert-api-client": "^2.5.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "file-extension": "^4.0.5",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "heroku": "^7.40.0",
+    "jsonwebtoken": "^8.4.0",
+    "mammoth": "^1.4.9",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "pdf-puppeteer": "^1.1.10",
+    "pdf2html": "^2.5.2",
+    "pdftohtmljs": "^0.6.0",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "unoconv": "^0.1.2",
+    "validator": "^10.9.0"
+  }

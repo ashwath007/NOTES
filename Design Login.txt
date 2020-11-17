@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<meta charset="UTF-8">                 
+		<meta name="viewport" content="width=device-width", initial-scale=1.0>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<tittle>Doc</tittle>  													
+	</head>
+
+<body><form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Password</label>
+      <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Address 2</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">City</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">State</label>
+      <select id="inputState" class="form-control">
+        <option selected>Choose...</option>
+        <option>...</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Sign in</button> 
+   <a href="/index.html">LOGIN</a>
+</form>
+
+//////////////////////////////////////////////////////////////
+
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<meta charset="UTF-8">                 
+		<meta name="viewport" content="width=device-width", initial-scale=1.0>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<tittle>Doc</tittle>  													
+	</head>
+
+<body>
+	<ul class="nav justify-content-center" style="margin-left: 30% ; margin-right: 30% ; margin-top:20px">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">HOME</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">LOGIN</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">SIGNUP</a> 
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#">Disabled</a>
+  </li>
+</ul>
+<form action="/login" style="margin-left: 40% ; margin-right: 40% ; margin-top:10%">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email id</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="user">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pass">
+  </div>
+	
+	<div class="form-group">
+    <label for="fname">First Name</label>
+    <input type="text" class="form-control" id="namefi" aria-describedby="emailHelp" placeholder="First name" name="user1">
+    
+  </div> <div class="form-group">
+    <label for="sname">Last Name</label>
+    <input type="text" class="form-control" id="namese" aria-describedby="emailHelp" placeholder="second name" name="user2">
+    
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Submit</button>
+	<a href ="/register">REGISTER</a>
+</form>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+	</html>
+
+
+

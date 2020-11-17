@@ -1,0 +1,530 @@
+var express = require('express');
+var formidable = require('formidable');
+const mongoose = require('mongoose');
+var cors = require('cors');
+var jwt = require('jsonwebtoken');
+require('dotenv').config();
+var randomize = require('randomatic');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var app = express();
+var cookieParser = require('cookie-parser');
+var i = 0;
+const fs = require('fs');
+const Path = require('path');
+var fileExtension = require('file-extension');
+var filesname = [];
+var dir = require('node-dir');
+const chalk = require('chalk');
+const fileNAMES = [];
+const fileTYPES = [];
+app.use(express.static('./public'));
+app.use(cookieParser());
+
+
+//DELECTION FUNCTION
+const deleteFolderRecursive = function(path) {
+    if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach((file, index) => {
+            const curPath = Path.join(path, file);
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+};
+
+
+//mongo
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then(() => {
+    console.log(chalk.green.bold("DONE"));
+});
+const userSchema = new mongoose.Schema({
+    usercode: {
+        type: String
+    },
+    uploads: {
+        type: String,
+        contentType: String
+    },
+	userCookie:String,
+    files: [String],
+    filesType: [String]
+
+}, { timestamps: true });
+const user = mongoose.model("user", userSchema);
+//mongo
+app.get("/", (req, res) => {
+	 const cok = randomize('Aa09', 6);
+	console.log(req.cookies); ///PREVIOUS COOKIE
+	res.cookie('Name', cok).render("one.ejs");
+})
+app.get('/send', function(req, res) {
+	console.log(chalk.blue.bold(req.cookies.Name)); //NEW COOKIES KEY:Name
+    res.render("land.ejs",{msg:""});
+});
+
+var usercode = "";
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.post('/', function(req, res, file) {
+
+
+
+
+
+    //console.log(req);
+    const u = new user();
+	console.log(chalk.blue.bold(req.cookies.Name)+" / post upload");  
+
+    var form = new formidable.IncomingForm();
+
+
+	console.log(chalk.blue(JSON.stringify(form)));
+
+
+    const g = randomize('Aa', 4);
+    usercode = g;
+
+
+
+    form.parse(req, (error, fields, files)=>{
+		console.log(files);
+		if(files.size>1048560){
+		   res.render("land.ejs",{msg:"Kindly Upload File less than 10MB "});
+		   }
+		else{
+			
+			
+		}
+	});
+
+    fs.mkdir('public/' + g, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Directory Created');
+        }
+    })
+    form.on('fileBegin', function(name, file) {
+	try{
+        file.path = __dirname + '/public/' + g + "/" + file.name;
+        console.log(__dirname);
+        console.log(file.path);
+
+        console.log(g);}
+		catch(exce){
+			res.send("Error Please try again");
+			res.redirect("/");
+		}
+
+    });
+
+
+    form.on('end', () => {
+        u.usercode = usercode;
+		u.userCookie=req.cookies.Name;
+        const filenameArray = [];
+        const filetypeArray = [];
+        dir.files('public/' + usercode, 'file', function(err, content) {
+                if (err) throw err;
+                content.forEach((files) => {
+                    console.log('files : ', files); // get content of files
+                    filenameArray[i] = files.slice(12, ); //here we are taking the file name alone
+                    u.files.push(files.slice(12, ));
+                    console.log('Content Type :', fileExtension(files));
+                    u.filesType.push(fileExtension(files));
+                    filetypeArray[i] = fileExtension(files);
+                    i++;
+                    console.log(typeof JSON.stringify(filenameArray));
+                    console.log(typeof filetypeArray);
+
+                })
+                fileNAMES[0] = JSON.stringify(filenameArray);
+                fileTYPES[0] = JSON.stringify(filetypeArray);
+                console.log(typeof fileNAMES[0] + "==========" + typeof fileTYPES[0]);
+                console.log(fileNAMES[0] + "==========" + fileTYPES[0]);
+
+                u.save((err, ok) => {
+                    if (err) {
+                        console.log("Error in saving")
+                    } else {
+                        console.log(ok);
+						res.render("donePage.ejs");
+                       // res.render("viewpage.ejs", { done: ok, allfiles: content,usercode:usercode });
+                    }
+                });
+            },
+            function(err, files) {
+                if (err) throw err;
+                console.log('finished reading files:'); // get filepath 
+            });
+
+
+    });
+
+
+
+
+});
+//SEND CODE BLOCK WITH COOKIE
+app.post("/getUserCode",(req,res)=>{
+		console.log(chalk.blue.bold(req.cookies.Name)+" GET USER-CODE WITH COOKIE BLOCK");
+		  
+			user.findOne({userCookie:req.cookies.Name},(err,getAll)=>{
+				if(err){
+				   console.log(err);
+				   }
+				else{
+					console.log(getAll);
+					console.log(getAll.usercode);
+
+					res.render("codePage.ejs",{usercode:getAll.usercode});
+				}
+			})
+});
+//RECEIVE BLOCK
+
+app.get("/get", (req, res) => {
+    res.render("get.ejs",{msg:""});
+});
+
+app.post("/downloadfile", (req, res) => {
+	user.find({usercode:req.body.entercode},(err,gh)=>{
+		if(err){
+		   console.log(err);
+		   }
+		else{
+			console.log(chalk.blue(gh));
+		}
+	});
+	  
+	
+	try{
+    const fileList = "";
+    console.log(req.body.entercode + " User need hes/her files");
+	
+    user.findOne({ usercode: req.body.entercode }, (err, fi) => {
+        if (err) {
+			console.log(err);
+        } else {
+            console.log(fi+" |||");
+			if(fi===null){
+				console.log("There is not file with this code");///  HERE WE SOLVED THE PROBLEM OF UPLOAD INVALID CODE POROBLEM
+			
+				res.render("get.ejs",{msg:"please enter the valid code!!"});
+			}
+			else if(fi!=null){
+            console.log(fi.files);
+            console.log(fi.filesType);
+            console.log(fi._id);
+            console.log(fi.createdAt);
+            console.log(fi.usercode);
+            res.render("receive.ejs", { Rfiles: fi, filesName: fi.files, userCode: fi.usercode });
+		}
+		}
+    })}
+	
+	catch(e){
+		res.redirect("/");
+	}
+});
+app.post("/end", (req, res) => {
+    console.log(req.body.Code);
+    console.log("END SESSION " + req.body.Code);
+    user.findOneAndDelete({ usercode: req.body.Code }, (err, deleUsercode) => {
+        if (err) {
+			res.redirect("/");
+            console.log("ERROR END SESSION");
+        } else {
+            console.log(deleUsercode);
+        }
+    });
+    deleteFolderRecursive('./public/' + req.body.Code);
+    res.redirect("/");
+});
+
+
+app.listen(4000, () => {
+    console.log("Yes connected");
+});
+
+
+
+
+
+
+
+
+
+
+  <a href="/search"  class="search_icon"><i class="fas fa-search"></i></a>	
+
+
+
+//
+const mongoose  = require('mongoose');
+const { ObjectId } = mongoose.Schema;
+
+
+const cvschema = new mongoose.Schema({
+	name:{
+		type:String,
+		required:true,
+		maxlength:32,
+		trim:true
+	},
+	add1: {
+		type:String,
+		required:true,
+		trim:true
+	},
+	email: {
+		type:String,
+		unique:true,
+		trim:true
+	},
+	phone: {
+		type:Number,
+		unique:true,
+		trim:true
+	},
+	exp: {
+		maxlength:2,
+		type:Number,
+		trim:true
+	},
+	obj:{
+		type:String,
+		
+		trim:true
+	},
+	
+	cv_id: {
+		type:String
+	},
+	cvpic:{
+		type:ObjectId,
+		ref:"cv"
+	}
+
+	
+});
+
+
+
+
+
+
+
+
+
+module.exports = mongoose.model("cv",cvschema);
+//
+
+
+*******************************************************************
+"dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "file-extension": "^4.0.5",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "heroku": "^7.40.0",
+    "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.4.0",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "uuid": "^8.1.0",
+    "validator": "^10.9.0"
+  }
+*******************************************************************
+
+
+var express = require('express');
+var randomize = require('randomatic');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var app = express();
+var cookieParser = require('cookie-parser');
+var i = 0;
+const fs = require('fs');
+const Path = require('path');
+var fileExtension = require('file-extension');
+var filesname = [];
+var dir = require('node-dir');
+const chalk = require('chalk');
+const fileNAMES = [];
+var mongoose = require('mongoose');
+const fileTYPES = [];
+var formidable = require('formidable');
+const { v4: uuidv4 } = require('uuid');
+
+// app.use(express.static('./public'));
+
+app.use( express.static( "public" ) );
+app.use(cookieParser());
+
+//dottrust/public/4e1454aa-fdf3-4525-b886-6375d94a6f92/san.jpg
+
+
+//IMPORTING THE CV_SCHEMA
+const CV = require('./models/cv');
+const PIC = require('./models/pic');
+app.use('*/images',express.static('public/images'));
+
+const pic = PIC();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
+mongoose.connect("mongodb://localhost:27017/cv", { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then(()=>{
+	console.log(chalk.red("DB Connected"));
+});
+
+
+
+var PORT = 3000;
+
+
+app.set("view engine",'ejs');
+
+
+app.get("/",(req,res)=>{
+	const user_id =  uuidv4(); //NEW UUID FOR EACH CV_S
+	const tracker = "i am watching"
+	res.cookie("USER_ID",user_id);
+	res.cookie("Tracker",tracker);
+	res.render("home",{img:"https://images.unsplash.com/photo-1587613866780-23b903d3d97a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"});
+});
+app.post("/cvupload",(req,res)=>{
+	
+	console.log(chalk.blue.bold(req.cookies.USER_ID));
+	console.log(chalk.blue.bold(req.cookies.Tracker));
+	console.log(chalk.yellow.bold(req.body.email));
+	console.log(req.body);
+	const newcv = CV(req.body);
+	newcv.save((err,done)=>{
+		if(err){
+				console.log("error" + err);		   
+		   }
+		else{
+			console.log(done);
+			
+			pic.cvpic = done._id;
+			newcv.cv_id = req.cookies.USER_ID;
+			pic.save((err,ko)=>{
+				if(err){
+				   console.log(err);
+				   }
+				else{
+					console.log(ko);
+				}
+			});
+			newcv.save((err,ok)=>{
+				if(err){
+				   console.log(err);
+				   }
+				else{
+					console.log(ok);
+				}
+			});
+		}
+	});
+	
+});
+
+app.post("/profilepic",(req,res)=>{
+	//STORING THE PROFILE PIC
+	// res.render("home",{img:"https://media1.giphy.com/media/PUYgk3wpNk0WA/giphy.gif?cid=ecf05e470d49f7f68255434c27f248481a3da9393d71222b&rid=giphy.gif"});
+    var form = new formidable.IncomingForm();
+	
+  
+    form.parse(req, (error, fields, files)=>{
+		console.log(files);
+		if(files.size>1048560){
+		   res.render("land.ejs",{msg:"Kindly Upload File less than 10MB "});
+		   }
+		else{
+			
+			
+		}
+	});
+
+    fs.mkdir('public/' + "images/"+ req.cookies.USER_ID, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Directory Created');
+        }
+    })
+    form.on('fileBegin', function(name, file) {
+	try{
+        file.path = __dirname + '/public/' + "images/" + req.cookies.USER_ID + "/" + file.name;
+        console.log(__dirname);
+        console.log(file.path);
+
+        console.log(req.cookies.USER_ID);}
+		catch(exce){
+			res.send("Error Please try again");
+			res.redirect("/");
+		}
+
+    });
+
+//dd
+   
+      form.on('end', () => {
+        dir.files('public/images/' + req.cookies.USER_ID, 'file', function(err, content) {
+                if (err) throw err;
+                content.forEach((files) => {
+                    console.log('files : ', files); // get content of filesconm
+					console.log(chalk.yellow(files));
+					pic.propic = files;
+					pic.save((err,done)=>{
+						if(err){
+						   	console.log(err);
+						   }
+						else{
+							console.log(done);
+							console.log(chalk.red(done._id));
+							res.render("home",{"img":"https://hunchcv.run-us-west2.goorm.io/"+files});
+						}
+					});
+				})
+
+            },
+            function(err, files) {
+                if (err) throw err;
+                console.log('finished reading files:'); // get filepath 
+			
+			
+            });
+
+
+    });
+
+});
+//dd
+
+
+app.listen(PORT,()=>{
+	console.log("Server connected");
+});

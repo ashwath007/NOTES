@@ -1,0 +1,289 @@
+"dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.0.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "detect-file-type": "^0.2.8",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.16.4",
+    "file-extension": "^4.0.5",
+    "file-type": "^14.6.2",
+    "formidable": "^1.2.2",
+    "git": "^0.1.5",
+    "heroku": "^7.40.0",
+    "html-pdf-viewer": "^1.0.14",
+    "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.4.0",
+    "mammoth": "^1.4.9",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2",
+    "node-dir": "^0.1.17",
+    "randomatic": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "serve-favicon": "^2.5.0",
+    "underscore": "^1.10.2",
+    "uuid": "^8.1.0",
+    "validator": "^10.9.0"
+  }
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+const express = require('express');
+const app = express();
+var formidable = require('formidable');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+var cors = require('cors');
+const fs = require('fs');
+const Path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
+var fileExtension = require('file-extension');
+var dir = require('node-dir');
+const chalk = require('chalk');
+var randomize = require('randomatic');
+
+//FILE TYPE
+const FileType = require('file-type');
+var detect = require('detect-file-type'); //FILE TYPE
+
+var mammoth = require("mammoth");
+
+const CV = require('./models/cvs');
+
+const path = require('path');
+app.use(express.static('./public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.set('view engine','ejs');
+
+
+
+
+mongoose.connect("mongodb+srv://hunch:hunchhunch@cluster0-bfk5b.mongodb.net/hunch?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }).then(() => {
+    console.log(chalk.green.bold("DONE"));
+});
+//Importing model
+	const Cv = CV();
+	const nCv = CV();
+	 // const datas = new DATA();
+
+
+app.get("/",(req,res)=>{
+	const user_id =  uuidv4(); //NEW UUID FOR EACH CV_S
+	res.cookie("USER_ID",user_id); 
+	res.render("land");
+});
+
+//SHOW DOCS
+app.get("/viewdoc/type/:ftype/bb/:b",(req,res)=>{
+	// /viewdoc/DZkE/example(3).docx/type/.docx
+	// console.log(req.params.x);
+	
+// 	console.log(req.params.ftype);
+// 		console.log(req.params.b);
+
+// 	var html;
+// 	const mam  = (resu) => {
+// 		const yt = resu;
+// 		res.send(yt)
+// 	}
+// 								//cv_resum_uploads/public/WJsg/example(2).docx
+// 								mammoth.convertToHtml({path: './public/'+req.params.b+'/'+req.params.ftype})
+// 									.then(function(result){
+// 									   html = result.value; // The generated HTML
+// 										var messages = result.messages; // Any messages, such as warnings during conversion
+// 										  mam(html)
+// 									// res.send(html)
+// 									});
+	// console.log(chalk.blue(req.params.pid));	
+	// // console.log(chalk.blue(req.params.fpath));
+	// console.log(chalk.blue(req.params.ftype));
+	// 	CV.findById(req.params.pid,(err,got)=>{
+	// 		if(err){
+	// 			console.log(err);
+	// 		}
+	// 		else{
+	// 			console.log(chalk.bold.green(got));
+	// 			console.log(got.cvpath);
+	// 			let resume;
+	// var html;
+	// const mam  = (resu) => {
+	// 	const yt = "<a href="+got.cvpath+" download>Download Resume</a>"+resu;
+	// 	res.send(yt)
+	// }
+	// 							//cv_resum_uploads/public/WJsg/example(2).docx
+	// 							mammoth.convertToHtml({path: './public/'+got.cvpath})
+	// 								.then(function(result){
+	// 								   html = result.value; // The generated HTML
+	// 									var messages = result.messages; // Any messages, such as warnings during conversion
+	// 									  mam(html)
+	// 								// res.send(html)
+	// 								});
+	// 		}
+	// 	})
+
+});
+//SEARCHING
+
+app.post("/search",(req,res)=>{
+	console.log(chalk.yellow(req.body.branch));
+		console.log(chalk.yellow(req.body.keyone));
+		console.log(chalk.yellow(req.body.keytwo));
+	
+		
+		//Here we are searching the Keywords and branches to search the queries
+		CV.find({branch:req.body.branch,keyone:req.body.keyone,keytwo:req.body.keytwo},(err,ready)=>{
+			if(err){
+				console.log(err);
+			}
+			else{
+				console.log(chalk.red(ready));
+				// console.log(chalk.blue(ready[].keywords));
+				console.log(chalk.bold.red(ready.filetype));
+				res.render("show",{resumes:ready,branch:req.body.branch,keyone:req.body.keyone,keytwo:req.body.keytwo});
+			}
+		})
+				
+	
+		//
+	
+});
+//
+app.get("/admin",(req,res)=>{
+	const user_id =  uuidv4(); //NEW UUID FOR EACH CV_S
+	res.cookie("USER_ID",user_id); 
+	res.render("admin",{msg:"Upload Keywords first!!",branch:""});
+});
+
+app.post("/branch",(req,res)=>{
+		
+					console.log(req.body.branch);
+					console.log(req.body.keyone);
+					console.log(req.body.keytwo);
+	Cv.branch = req.body.branch;
+	Cv.keyone = req.body.keyone;
+	Cv.keytwo = req.body.keytwo;
+
+	Cv.save((e,r)=>{
+		if(e){
+			console.log(e);
+		}
+		else{
+			console.log(r);
+			res.render("admin",{branch:req.body.branch,msg:"Keywords Upload Done , go for File upload next"});
+		}
+		//Render the upload page
+		
+});
+app.post("/upload",(req,res)=>{
+	// console.log(chalk.green(req.cookies.USER_ID));
+	//here the cv ro the resume is going to be uploaded
+	const USER_ID = randomize('Aa', 4);
+		var form = new formidable.IncomingForm();
+	
+  
+    form.parse(req, (error, fields, files)=>{
+		console.log(files);
+		if(files.size>1048560){
+		   res.render("admin",{msg:"Kindly Upload File less than 10MB ",branch:""});
+		   }
+		else{
+			
+				
+		}
+	});
+
+    fs.mkdir('public/' + USER_ID, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Directory Created');
+        }
+    });
+	
+	
+	
+    form.on('fileBegin', function(name, file) {
+	try{
+		console.log(chalk.green.bold(file.type));
+        var newfinleName = file.name.replace(/ /g, "");
+        file.path = __dirname + '/public/'  + USER_ID + "/" + newfinleName;
+        console.log(__dirname);
+        console.log(file.path);
+
+        console.log(USER_ID);
+	}
+		catch(exce){
+			res.send("Error Please try again");
+		
+		}
+
+    });
+
+//dd
+   
+      form.on('end', () => {
+		 setTimeout(()=>{
+			 dir.files('public/' + USER_ID, 'file', function(err, content) {
+                if (err) throw err;
+                content.forEach((files) => {
+                    console.log('files : ', files); // get content of filesconm
+					console.log(chalk.yellow(files));
+					console.log(chalk.yellow(files.slice(7)));
+						console.log(chalk.yellow(files.slice(12)));
+					
+					//FILE TYPE 
+								console.log(chalk.red(path.extname(files.slice(12))));
+								const File_Type_detect = path.extname(files.slice(12));
+					//
+					
+					
+					Cv.cvpath = files.slice(7);
+					Cv.filetype = File_Type_detect;
+					Cv.save((err,done)=>{
+						if(err){
+						   	console.log(err);
+						   }
+						else{
+							console.log(done);
+							console.log(chalk.red(done._id));
+							Cv.keywords = done._id;
+							Cv.save((e,good)=>{
+								if(e){
+									console.log(e);
+								}
+								else{
+									console.log(good);
+																res.redirect("/admin");
+
+								}
+							});
+						}
+					});
+				})
+
+            },
+            function(err, files) {
+                if (err) throw err;
+                console.log('finished reading files:'); // get filepath 
+			
+			
+            });
+			 
+		 },4300)
+        
+    });
+	});
+
+});
+
+app.listen(process.env.PORT || 4000,()=>{
+	console.log("Server started");
+});

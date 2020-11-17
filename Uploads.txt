@@ -1,0 +1,130 @@
+const { v4: uuidv4 } = require('uuid');
+const user_id =  uuidv4(); //NEW UUID FOR EACH CV_S
+	const tracker = "i am watching"
+	res.cookie("USER_ID",user_id); 
+
+
+var form = new formidable.IncomingForm();
+	
+  
+    form.parse(req, (error, fields, files)=>{
+		console.log(files);
+		if(files.size>1048560){
+		   res.render("land.ejs",{msg:"Kindly Upload File less than 10MB "});
+		   }
+		else{
+			
+			
+		}
+	});
+
+    fs.mkdir('public/' + "images/"+ req.cookies.USER_ID, err => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Directory Created');
+        }
+    })
+    form.on('fileBegin', function(name, file) {
+	try{
+        file.path = __dirname + '/public/' + "images/" + req.cookies.USER_ID + "/" + file.name;
+        console.log(__dirname);
+        console.log(file.path);
+
+        console.log(req.cookies.USER_ID);}
+		catch(exce){
+			res.send("Error Please try again");
+			res.redirect("/");
+		}
+
+    });
+
+//dd
+   
+      form.on('end', () => {
+        dir.files('public/images/' + req.cookies.USER_ID, 'file', function(err, content) {
+                if (err) throw err;
+                content.forEach((files) => {
+                    console.log('files : ', files); // get content of filesconm
+					console.log(chalk.yellow(files));
+					pic.propic = files;
+					pic.save((err,done)=>{
+						if(err){
+						   	console.log(err);
+						   }
+						else{
+							console.log(done);
+							console.log(chalk.red(done._id));
+							res.render("home",{"img":"https://hunchcv.run-us-west2.goorm.io/"+files});
+						}
+					});
+				})
+
+            },
+            function(err, files) {
+                if (err) throw err;
+                console.log('finished reading files:'); // get filepath 
+			
+			
+            });
+
+
+    });
+
+
+
+
+const mongoose  = require('mongoose');
+const { ObjectId } = mongoose.Schema;
+
+
+const cvschema = new mongoose.Schema({
+	name:{
+		type:String,
+		required:true,
+		maxlength:32,
+		trim:true
+	},
+	add1: {
+		type:String,
+		required:true,
+		trim:true
+	},
+	email: {
+		type:String,
+		unique:true,
+		trim:true
+	},
+	phone: {
+		type:Number,
+		unique:true,
+		trim:true
+	},
+	exp: {
+		maxlength:2,
+		type:Number,
+		trim:true
+	},
+	obj:{
+		type:String,
+		
+		trim:true
+	},
+	
+	cv_id: {
+		type:String
+	},
+
+
+	
+});
+
+
+
+
+
+
+
+
+
+module.exports = mongoose.model("cv",cvschema);
