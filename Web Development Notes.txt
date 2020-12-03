@@ -2,6 +2,13 @@ offer option crime clap maximum prefer wreck galaxy raccoon way rose castle
 
 
 
+Goorm mongo starting ERROR : 
+
+1. mkdir -p /data/db/
+2. chown `id -u` /data/db
+
+
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
