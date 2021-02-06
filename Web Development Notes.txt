@@ -169,6 +169,8 @@ Concepts ..... April 20 2020;
 			7. http://expressjs.com/en/guide/writing-middleware.html#writing-middleware-for-use-in-express-apps --- middleware
 			8. mongod start in groomIDE : STEP 1 >>> echo "mongod --nojournal"  > mongod
 						STEP 2 >>>chmod a+x mongod
+						
+						If ERROR : in goormide >>> mkdir -p /data/db/
 
 
 
